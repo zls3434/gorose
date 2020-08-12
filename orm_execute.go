@@ -11,6 +11,11 @@ func (dba *Orm) Insert(data ...interface{}) (int64, error) {
 	return dba.exec("insert", data...)
 }
 
+// InsertOrUpdate : insert data and get affected rows, if exist update data
+func (dba *Orm) InsertOrUpdate(data ...interface{}) (int64, error) {
+	return dba.exec("insertorupdate", data...)
+}
+
 // insertGetId : insert data and get id
 func (dba *Orm) InsertGetId(data ...interface{}) (int64, error) {
 	_, err := dba.Insert(data...)
@@ -38,7 +43,7 @@ func (dba *Orm) Delete() (int64, error) {
 
 // Delete : delete data
 func (dba *Orm) exec(operType string, data ...interface{}) (int64, error) {
-	if operType == "insert" || operType == "update" {
+	if operType == "insert" || operType == "update" || operType == "insertorupdate" {
 		if dba.GetData() == nil {
 			if len(data) > 0 {
 				dba.Data(data[0])

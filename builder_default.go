@@ -20,11 +20,11 @@ type BuilderDefault struct {
 	placeholder int
 	driver      string
 	bindValues  []interface{}
-	current IBuilder
+	current     IBuilder
 }
 
 // NewBuilderDefault 初始化
-func NewBuilderDefault(o IOrm,current IBuilder) *BuilderDefault {
+func NewBuilderDefault(o IOrm, current IBuilder) *BuilderDefault {
 	//onceBuilderDefault.Do(func() {
 	//	builderDefault = new(BuilderDefault)
 	//	builderDefault.operator = operator
@@ -132,6 +132,9 @@ func (b *BuilderDefault) BuildExecute(operType string) (sqlStr string, args []in
 			return
 		}
 		sqlStr = fmt.Sprintf("UPDATE %s SET %s%s", b.BuildTable(), update, where)
+	case "insertorupdate":
+		//TODO ON DUPLICATE KEY UPDATE
+		sqlStr = fmt.Sprintf("INSERT INTO %s (%s) VALUES %s ON DUPLICATE KEY UPDATE %s", b.BuildTable(), insertkey, insertval, update)
 	case "delete":
 
 		where, err = b.BuildWhere()
